@@ -1,0 +1,19 @@
+<h2>Edit User</h2>
+<form method="post">
+    {% csrf_token %}
+    <label>Username:</label>
+    <input type="text" name="username" value="{{ user.username }}"><br>
+
+    <label>Email:</label>
+    <input type="email" name="email" value="{{ user.email }}"><br>
+
+    <label>Role:</label>
+    <select name="role">
+        <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+        <option value="landlord" {% if user.role == 'landlord' %}selected{% endif %}>Landlord</option>
+        <option value="tenant" {% if user.role == 'tenant' %}selected{% endif %}>Tenant</option>
+        <option value="rider" {% if user.role == 'rider' %}selected{% endif %}>Rider</option>
+    </select><br>
+
+    <button type="submit">Save Changes</button>
+</form>

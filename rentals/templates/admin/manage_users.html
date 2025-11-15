@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Users</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f4f8;
+            padding: 40px;
+            color: #333;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        input[type="text"], select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        a.export-btn {
+            padding: 8px 16px;
+            background-color: #2980b9;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background-color: #ecf0f1;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            vertical-align: middle;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .admin { background-color: #34495e; }
+        .landlord { background-color: #27ae60; }
+        .tenant { background-color: #f39c12; }
+        .rider { background-color: #16a085; }
+
+        .actions a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: #3498db;
+        }
+
+        .actions a:hover {
+            text-decoration: underline;
+        }
+
+        .pagination {
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: #2c3e50;
+        }
+
+        .pagination span {
+            font-weight: bold;
+        }
+
+        img.profile {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>👥 Manage Users</h1>
+
+    <form method="get">
+        <input type="text" name="q" placeholder="Search by username or email" value="{{ query }}">
+        <select name="role">
+            <option value="">All Roles</option>
+            <option value="admin" {% if role == 'admin' %}selected{% endif %}>Admin</option>
+            <option value="landlord" {% if role == 'landlord' %}selected{% endif %}>Landlord</option>
+            <option value="tenant" {% if role == 'tenant' %}selected{% endif %}>Tenant</option>
+            <option value="rider" {% if role == 'rider' %}selected{% endif %}>Rider</option>
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
+    <a href="{% url 'export_users_excel' %}" class="export-btn">📤 Export to Excel</a>
+
+    <table>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Date Joined</th>
+            <th>Actions</th>
+        </tr>
+        {% for user in page_obj %}
+        <tr>
+            <td>
+                {% if user.profile_picture %}
+                    <img src="{{ user.profile_picture.url }}" alt="Profile" class="profile">
+                {% endif %}
+                {{ user.username }}
+            </td>
+            <td>{{ user.email }}</td>
+            <td><span class="badge {{ user.role }}">{{ user.role|title }}</span></td>
+            <td>{{ user.date_joined|date:"M d, Y" }}</td>
+            <td class="actions">
+                <a href="{% url 'edit_user' user.id %}">✏️ Edit</a>
+                <a href="{% url 'delete_user' user.id %}" onclick="return confirm('Are you sure you want to delete {{ user.username }}?')">🗑 Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No users found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}&q={{ query }}&role={{ role }}">&laquo; Prev</a>
+        {% endif %}
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&q={{ query }}&role={{ role }}">Next &raquo;</a>
+        {% endif %}
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Booking</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #e0f7fa, #f1f8e9);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #2e7d32;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .book-btn {
+            background-color: #43a047;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .book-btn:hover {
+            background-color: #388e3c;
+        }
+
+        .house-info {
+            background-color: #f1f8e9;
+            padding: 10px;
+            border-left: 4px solid #66bb6a;
+            margin-bottom: 20px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+    <a href="{% url 'house_list' %}" style="color: #2e7d32; text-decoration: none; font-weight: bold;">← Back to Available Houses</a>    
+        <h2>Confirm Booking</h2>
+
+        <div class="house-info">
+            <p><strong>House:</strong> {{ house.title }}</p>
+            <p><strong>Tenant:</strong> {{ tenant.username }}</p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label for="national_id">National ID Number:</label>
+            <input type="text" name="national_id" id="national_id" placeholder="Enter your ID number">
+
+            <label for="phone">Phone:</label>
+            <input type="text" name="phone" id="phone" placeholder="Your phone number">
+
+            <label for="occupation">Occupation:</label>
+            <input type="text" name="occupation" id="occupation" placeholder="e.g. Teacher, Driver">
+
+            <label for="move_in">Preferred Move-in Date:</label>
+            <input type="date" name="move_in" id="move_in">
+
+            <label for="notes">Additional Notes:</label>
+            <textarea name="notes" id="notes" rows="4" placeholder="Any special requests..."></textarea>
+
+            <button type="submit" class="book-btn">Confirm Booking</button>
+        </form>
+    </div>
+</body>
+</html>

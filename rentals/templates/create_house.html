@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create House</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #fbc2eb, #a6c1ee);
+            padding: 40px 20px;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 700px;
+            margin: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #6a1b9a;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .image-upload {
+            margin-top: 30px;
+        }
+
+        .image-upload h4 {
+            margin-bottom: 10px;
+            color: #6a1b9a;
+        }
+
+        button {
+            background-color: #6a1b9a;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto 0;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #4a148c;
+        }
+
+        .form-note {
+            font-size: 0.9em;
+            color: #777;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>🏠 Create a New House</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ house_form.as_p }}
+
+            <div class="image-upload">
+                <h4>📷 Upload House Images</h4>
+                {{ image_formset.management_form }}
+                {% for form in image_formset %}
+                    {{ form.as_p }}
+                {% endfor %}
+            </div>
+
+            <button type="submit">Create House</button>
+        </form>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<div class="rider-info" style="margin-bottom: 20px; padding: 10px; background-color: #f1f8e9; border-left: 4px solid #66bb6a;">
+    <h3>Welcome, {{ rider.user.username }}</h3>
+    <p><strong>Registered Area:</strong> {{ rider.area }}</p>
+    <p><strong>Phone:</strong> {{ rider.phone }}</p>
+    <p><strong>Delivery Price:</strong> KES {{ rider.price }}</p>
+</div>
+
+<div id="map" style="height: 500px;"></div>
+{{ bookings|json_script:"bookings-data" }}
+<script>
+  function initMap() {
+    const riderArea = {
+  lat: parseFloat("{{ rider.latitude|default_if_none:'0' }}"),
+  lng: parseFloat("{{ rider.longitude|default_if_none:'0' }}")
+};
+    const map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 12,
+      center: riderArea,
+    });
+
+    const bookings = JSON.parse(document.getElementById("bookings-data").textContent || '[]');
+    for (let i = 0; i < bookings.length; i++) {
+      const booking = bookings[i];
+      new google.maps.Marker({
+        position: { lat: booking.latitude, lng: booking.longitude },
+        map: map,
+        title: (booking.tenant && booking.tenant.username ? booking.tenant.username : "") + " - KES " + booking.calculated_price,
+      });
+    }
+  }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>

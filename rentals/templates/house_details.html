@@ -1,0 +1,26 @@
+<h2>Available Houses</h2>
+{% for house in houses %}
+  <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+    {% if house.image %}
+      <img src="{{ house.image.url }}" alt="{{ house.title }}" style="width:300px; height:auto;">
+    {% endif %}
+    <h3>{{ house.title }}</h3>
+    <p><strong>Location:</strong> {{ house.location }}</p>
+    <p><strong>Description:</strong> {{ house.description }}</p>
+    <p><strong>Status:</strong> {{ house.status }}</p>
+
+    {% if not house.is_booked %}
+      <form method="post" action="{% url 'book_house' house.id %}">
+        {% csrf_token %}
+        <button type="submit">Book This House</button>
+      </form>
+    {% else %}
+      <form method="post" action="{% url 'unbook_house' house.id %}">
+        {% csrf_token %}
+        <button type="submit">Unbook</button>
+      </form>
+    {% endif %}
+  </div>
+{% empty %}
+  <p>No houses available.</p>
+{% endfor %}

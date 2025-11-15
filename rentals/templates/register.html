@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create an Account</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .register-container {
+            background-color: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .register-container h2 {
+            text-align: center;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+
+        .register-container label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .register-container input,
+        .register-container select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+
+        .register-container button {
+            width: 100%;
+            padding: 12px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .register-container button:hover {
+            background-color: #c0392b;
+        }
+
+        .register-container .login-link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.95em;
+        }
+
+        .register-container .login-link a {
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .register-container .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .password-hints {
+            font-size: 0.85em;
+            color: #777;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-container">
+        <h2>📝 Create an Account</h2>
+        <form method="post">
+            {% csrf_token %}
+            <label for="id_username">Username</label>
+            {{ form.username }}
+
+            <label for="id_phone">Phone</label>
+            {{ form.phone }}
+
+            <label for="id_role">Role</label>
+            {{ form.role }}
+
+            <label for="id_password1">Password</label>
+            {{ form.password1 }}
+            <div class="password-hints">
+                • At least 8 characters<br>
+                • Not too similar to personal info<br>
+                • Not a common password<br>
+                • Not entirely numeric
+            </div>
+
+            <label for="id_password2">Confirm Password</label>
+            {{ form.password2 }}
+
+            <button type="submit">Sign Up</button>
+        </form>
+
+        <div class="login-link">
+            Already have an account? <a href="{% url 'login' %}">Log in here</a>
+        </div>
+    </div>
+
+</body>
+</html>

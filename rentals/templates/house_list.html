@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+    <title>Available Houses</title>
+    <style>
+        .house-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            background-color: #f9f9f9;
+        }
+
+        .house-details {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .house-details h3 {
+            margin-top: 0;
+        }
+
+        .house-details p {
+            margin: 5px 0;
+        }
+
+        .house-image {
+            flex: 0 0 200px;
+        }
+
+        .house-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .book-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .book-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+ <a href="{% url 'home' %}" style="color: #2e7d32; text-decoration: none; font-weight: bold;">← Back to Home</a>
+   <div class="house-list">
+  {% for house in houses %}
+    <div class="house-card">
+      <div class="house-details">
+        <h3>{{ house.title }}</h3>
+        <p><strong>Location:</strong> {{ house.location }}</p>
+        <p><strong>Price:</strong> KES {{ house.price }}</p>
+        <p><strong>Landlord:</strong> {{ house.landlord.username }}</p>
+        <p><strong>Phone:</strong> {{ house.landlord.phone }}</p>
+
+        {% if house.is_booked %}
+          <button style="background-color: red; color: white;" disabled>Booked</button>
+        {% else %}
+          <a href="{% url 'book_house' house.id %}">
+            <button style="background-color: green; color: white;">Book This House</button>
+          </a>
+        {% endif %}
+      </div>
+<div class="house-images">
+  {% for image in house.images.all %}
+    <img src="{{ image.image.url }}" alt="{{ image.caption }}" style="width: 150px; height: auto;">
+  {% empty %}
+    <p>No images available.</p>
+  {% endfor %}
+</div>
+      
+    </div>
+  {% empty %}
+    <p>No houses available at the moment.</p>
+  {% endfor %}
+</div>
+</body>
+</html>

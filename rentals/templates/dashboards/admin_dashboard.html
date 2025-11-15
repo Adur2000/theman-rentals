@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #e3f2fd, #fce4ec);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 60px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            padding: 40px;
+            text-align: center;
+        }
+        h1 {
+            color: #2e7d32;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #616161;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        .metrics {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+        .metric-box {
+            background-color: #f1f8e9;
+            padding: 20px;
+            border-radius: 10px;
+            width: 28%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        .metric-box h3 {
+            color: #33691e;
+            margin-bottom: 10px;
+        }
+        .metric-box p {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .btn {
+            display: inline-block;
+            margin: 12px;
+            padding: 14px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            background-color: #00796b;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #004d40;
+        }
+        .btn.secondary {
+            background-color: #6a1b9a;
+        }
+        .btn.secondary:hover {
+            background-color: #4a148c;
+        }
+        .btn.tertiary {
+            background-color: #c62828;
+        }
+        .btn.tertiary:hover {
+            background-color: #b71c1c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, Admin</h1>
+        <p>Here’s your full overview of the platform.</p>
+
+        <div class="metrics">
+            <div class="metric-box">
+                <h3>👥 Total Users</h3>
+                <p>{{ total_users }}</p>
+            </div>
+            <div class="metric-box">
+                <h3>🏠 Total Houses</h3>
+                <p>{{ total_houses }}</p>
+            </div>
+            <div class="metric-box">
+                <h3>📥 Total Bookings</h3>
+                <p>{{ total_bookings }}</p>
+            </div>
+        </div>
+
+        <a href="{% url 'manage_users' %}" class="btn">👥 Manage User Access</a>
+        <a href="{% url 'create_house' %}" class="btn secondary">➕ Create House</a>
+        <a href="{% url 'house_list' %}" class="btn">🏠 View All Houses</a>
+        <a href="{% url 'home' %}" class="btn tertiary">🏡 Back to Home</a>
+    </div>
+</body>
+</html>

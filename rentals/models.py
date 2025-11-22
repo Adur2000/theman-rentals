@@ -11,16 +11,18 @@ HOUSE_CATEGORIES = [
 ]
 
 class CustomUser(AbstractUser):
-    ROLE_CHOICES = (
-        ('landlord', 'Landlord'),
-        ('rider', 'Rider'),
-        ('tenant', 'Tenant'),
-    )
+    ROLE_CHOICES = [
+        ('CEO', 'CEO'),
+        ('Manager', 'Manager'),
+        ('Landlord', 'Landlord'),
+        ('Rider', 'Rider'),
+        ('Tenant', 'Tenant'),
+    ]
     phone = models.CharField(max_length=15, blank=True)
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='tenant')
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Tenant')
 
     def __str__(self):
-        return f"{self.username} ({self.role})"
+        return self.username
 
 class Landlord(models.Model):
     name = models.CharField(max_length=100)

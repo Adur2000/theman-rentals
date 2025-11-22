@@ -20,6 +20,10 @@ import csv
 import io
 from django.http import HttpResponse
 from rentals.utils.sms import send_sms_alert
+from django.shortcuts import render
+from .decorators import role_required
+from .models import House, Booking, SmsLog, CustomUser
+
 
 
 
@@ -213,6 +217,11 @@ def landlord_dashboard(request):
         'total_tenants': total_tenants
     })
 User = get_user_model()
+@role_required(['Landlord'])
+def landlord_dashboard(request):
+    houses = request.user.house_set.all()  # assuming House has FK to owner
+    return render(request, 'dashboard/landlord_dashboard.html', {'houses': houses})
+
 
 @login_required
 def manage_users(request):
@@ -281,5 +290,39 @@ def export_users_excel(request):
     response = HttpResponse(buffer.getvalue(), content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename=users.csv'
     return response
+@role_required(['CEO'])
+def ceo_dashboard(request):
+    houses = House.objects.all()
+    users = CustomUser.objects.all()
+    bookings = Booking.objects.all()
+    sms_logs = SmsLog.objects.all()
+    return render(request, 'dashboard/ceo_dashboard.html', {
+        'houses': houses,
+        'users': users,
+        'bookings': bookings,
+        'sms_logs': sms_logs,
+    })
+
+@role_required(['CEO'])
+def assign_role(request, user_id, role):
+    user = CustomUser.objects.get(id=user_id)
+    if role in dict(CustomUser.ROLE_CHOICES).keys():
+        user.role = role
+        user.save()
+    return redirect('ceo_dashboard')
+
+@role_required(['Manager'])
+def manager_dashboard(request):
+    users = CustomUser.objects.filter(role='Tenant')
+    return render(request, 'dashboard/manager_dashboard.html', {'users': users})
+
+@role_required(['Manager'])
+def assign_landlord(request, user_id):
+    user = CustomUser.objects.get(id=user_id)
+    user.role = 'Landlord'
+    user.save()
+    return redirect('manager_dashboard')
+
+
     return response
 

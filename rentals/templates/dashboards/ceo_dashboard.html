@@ -1,0 +1,30 @@
+<h1>CEO Dashboard</h1>
+<p>Welcome, {{ request.user.username }}</p>
+
+<h2>All Houses</h2>
+<ul>
+  {% for house in houses %}
+    <li>{{ house.name }} - {{ house.location }}</li>
+  {% endfor %}
+</ul>
+
+<h2>All Users</h2>
+<ul>
+  {% for user in users %}
+    <li>{{ user.username }} ({{ user.role }})</li>
+  {% endfor %}
+</ul>
+
+<h2>All Bookings</h2>
+<ul>
+  {% for booking in bookings %}
+    <li>{{ booking.house }} booked by {{ booking.user }}</li>
+  {% endfor %}
+</ul>
+
+<h2>SMS Logs</h2>
+<ul>
+  {% for sms in sms_logs %}
+    <li>{{ sms.message }} sent to {{ sms.recipient }}</li>
+  {% endfor %}
+</ul>

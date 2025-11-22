@@ -22,6 +22,9 @@ urlpatterns = [
     path('dashboard/admin/edit-user/<int:user_id>/', views.edit_user, name='edit_user'),
     path('dashboard/admin/delete-user/<int:user_id>/', views.delete_user, name='delete_user'),
     path('dashboard/admin/export-users/', views.export_users_excel, name='export_users_excel'),
+    path('dashboard/ceo/', views.ceo_dashboard, name='ceo_dashboard'),
+    path('dashboard/manager/', views.manager_dashboard, name='manager_dashboard'),
+
 
     # House management
     path('create-house/', views.create_house, name='create_house'),
@@ -31,6 +34,7 @@ urlpatterns = [
 
     # Django’s built-in auth (login/logout/password reset)
     path('accounts/', include('django.contrib.auth.urls')),
+
 ]
 
 

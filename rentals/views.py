@@ -22,7 +22,7 @@ from django.http import HttpResponse
 from rentals.utils.sms import send_sms_alert
 from django.shortcuts import render
 from .decorators import role_required
-from .models import House, Booking, SmsLog, CustomUser
+
 
 from django.shortcuts import render
 

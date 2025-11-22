@@ -6,6 +6,7 @@ urlpatterns = [
     # Public routes
     path('', views.home, name='home'),
     path('register/', views.register, name='register'),
+    path('login/', views.login_view, name='login'),
     path('houses/', views.house_list, name='house_list'),
     path('book/<int:house_id>/', views.book_house, name='book_house'),
     path('unbook/<int:house_id>/', views.unbook_house, name='unbook_house'),

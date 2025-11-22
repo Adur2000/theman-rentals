@@ -79,34 +79,51 @@
             font-weight: bold;
             color: #00ff00;
         }
+
+        .role-message {
+            font-size: 1.2em;
+            margin-top: 15px;
+            color: #ffd700;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
     <h1>WELCOME TO THE MAN</h1>
     <p class="subtitle">Your need, our priority</p>
 
-  {% if user.is_authenticated %}
-  <p>Hello {{ user.username }} ({{ user_role }})!</p>
-  <a href="{% url 'logout' %}">Logout</a>
+    {% if user.is_authenticated %}
+      <div class="user-info">
+        <p>Hello <strong>{{ user.username }}</strong> ({{ user_role }})!</p>
+        <a href="{% url 'logout' %}">Logout</a>
 
-  <hr>
-  <h2>Quick Access</h2>
-  {% if user_role == "CEO" %}
-    <a href="{% url 'ceo_dashboard' %}">Go to CEO Dashboard</a>
-  {% elif user_role == "Manager" %}
-    <a href="{% url 'manager_dashboard' %}">Go to Manager Dashboard</a>
-  {% elif user_role == "Landlord" %}
-    <a href="{% url 'landlord_dashboard' %}">Go to Landlord Dashboard</a>
-  {% elif user_role == "Rider" %}
-    <a href="{% url 'rider_workspace' %}">Go to Rider Workspace</a>
-  {% elif user_role == "Tenant" %}
-    <a href="{% url 'house_list' %}">Browse Houses</a>
-  {% endif %}
-{% else %}
-  <a href="{% url 'login' %}">Login</a> |
-  <a href="{% url 'register' %}">Register</a>
-{% endif %}
-  
+        <!-- Role-specific messages -->
+        {% if user_role == "Tenant" %}
+          <p class="role-message">Rent at the comfort of your home 🏠</p>
+        {% elif user_role == "Landlord" %}
+          <p class="role-message">Host, monitor and attract tenants easily 📊</p>
+        {% elif user_role == "Manager" %}
+          <p class="role-message">Manage operations and oversee rentals efficiently ⚡</p>
+        {% endif %}
+      </div>
+
+      <hr>
+      <h2>Quick Access</h2>
+      {% if user_role == "CEO" %}
+        <a href="{% url 'ceo_dashboard' %}">Go to CEO Dashboard</a>
+      {% elif user_role == "Manager" %}
+        <a href="{% url 'manager_dashboard' %}">Go to Manager Dashboard</a>
+      {% elif user_role == "Landlord" %}
+        <a href="{% url 'landlord_dashboard' %}">Go to Landlord Dashboard</a>
+      {% elif user_role == "Rider" %}
+        <a href="{% url 'rider_workspace' %}">Go to Rider Workspace</a>
+      {% elif user_role == "Tenant" %}
+        <a href="{% url 'house_list' %}">Browse Houses</a>
+      {% endif %}
+    {% else %}
+      <a href="{% url 'login' %}">Login</a> |
+      <a href="{% url 'register' %}">Register</a>
+    {% endif %}
 
     <div class="footer-note">
         For Enquiry you can Call or Sms at +254745300566!

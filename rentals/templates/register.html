@@ -86,34 +86,15 @@
     </style>
 </head>
 <body>
-
-    <div class="register-container">
-        <h2>📝 Create an Account</h2>
-        <form method="post">
-            {% csrf_token %}
-            <label for="id_username">Username</label>
-            {{ form.username }}
-
-            <label for="id_phone">Phone</label>
-            {{ form.phone }}
-
-            <label for="id_role">Role</label>
-            {{ form.role }}
-
-            <label for="id_password1">Password</label>
-            {{ form.password1 }}
-            <div class="password-hints">
-                • At least 8 characters<br>
-                • Not too similar to personal info<br>
-                • Not a common password<br>
-                • Not entirely numeric
-            </div>
-
-            <label for="id_password2">Confirm Password</label>
-            {{ form.password2 }}
-
-            <button type="submit">Sign Up</button>
-        </form>
+<form method="post" action="{% url 'register' %}">
+    {% csrf_token %}
+    {{ form.username }}
+    {{ form.phone }}
+    {{ form.role }}
+    {{ form.password1 }}
+    {{ form.password2 }}
+    <button type="submit">Sign Up</button>
+</form>
 
         <div class="login-link">
             Already have an account? <a href="{% url 'login' %}">Log in here</a>

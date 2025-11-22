@@ -22,9 +22,18 @@ from django.http import HttpResponse
 from rentals.utils.sms import send_sms_alert
 from django.shortcuts import render
 from .decorators import role_required
-
-
+from django.contrib.auth import authenticate, login
 from django.shortcuts import render
+from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import logout
+from .models import Landlord
+from .models import SMSLog
+
+
+
+
+
 
 def home(request):
     # Always show home.html after login
@@ -40,17 +49,45 @@ def house_list(request):
     else:
         houses = House.objects.all().prefetch_related('images')
     return render(request, 'house_list.html', {'houses': houses})
-
 def register(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)  # Log in the user immediately
-            return redirect('home')
+            login(request, user)  # log the user in immediately
+            messages.success(request, "Registration successful!")
+            return redirect("home")  # redirect to your homepage
+        else:
+            messages.error(request, "Please correct the errors below.")
     else:
-        form = CustomUserCreationForm()
-    return render(request, 'register.html', {'form': form})
+        form = UserCreationForm()
+    return render(request, "register.html", {"form": form})
+
+def login_view(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("home")  # redirect to your homepage
+        else:
+            messages.error(request, "Invalid username or password")
+    return render(request, "login.html")
+def logout_view(request):
+    logout(request)
+    return redirect('login')  # redirect to your login page
+def house_list(request):
+    houses = House.objects.all()
+    return render(request, "houses/list.html", {"houses": houses})
+
+# House detail
+def house_detail(request, pk):
+    house = get_object_or_404(House, pk=pk)
+    return render(request, "houses/detail.html", {"house": house})
+
+
+
 
 @login_required
 def book_house(request, house_id):
@@ -138,6 +175,51 @@ def create_house(request):
         'house_form': house_form,
         'image_formset': image_formset
     })
+@login_required
+def house_update(request, pk):
+    house = get_object_or_404(House, pk=pk)
+
+    # Optional: restrict editing to landlords/admins
+    if not request.user.is_superuser and getattr(request.user, "role", None) != "landlord":
+        return render(request, "access_denied.html", {
+            "message": "Only landlords and admins can update houses."
+        })
+
+    if request.method == "POST":
+        form = HouseForm(request.POST, instance=house)
+        if form.is_valid():
+            form.save()
+            return redirect("house_detail", pk=house.pk)
+    else:
+        form = HouseForm(instance=house)
+
+    return render(request, "houses/update.html", {"form": form, "house": house})
+
+
+@login_required
+def house_delete(request, pk):
+    house = get_object_or_404(House, pk=pk)
+
+    # Optional: restrict deletion to landlords/admins
+    if not request.user.is_superuser and getattr(request.user, "role", None) != "landlord":
+        return render(request, "access_denied.html", {
+            "message": "Only landlords and admins can delete houses."
+        })
+
+    if request.method == "POST":
+        house.delete()
+        return redirect("house_list")
+
+    # Confirmation page
+    return render(request, "houses/confirm_delete.html", {"house": house})
+def landlord_list(request):
+    landlords = Landlord.objects.all()
+    return render(request, "landlords/list.html", {"landlords": landlords})
+
+def landlord_detail(request, pk):
+    landlord = get_object_or_404(Landlord, pk=pk)
+    return render(request, "landlords/detail.html", {"landlord": landlord})
+
 @staff_member_required  # Only superusers or staff can access
 def manage_users(request):
     User = get_user_model()
@@ -152,6 +234,25 @@ def manage_users(request):
         return redirect('manage_users')
 
     return render(request, 'admin/manage_users.html', {'users': users})
+def rider_list(request):
+    riders = Rider.objects.all()
+    return render(request, "riders/list.html", {"riders": riders})
+def rider_detail(request, pk):
+    rider = get_object_or_404(Rider, pk=pk)
+    return render(request, "riders/detail.html", {"rider": rider})
+def booking_list(request):
+    bookings = Booking.objects.all()
+    return render(request, "bookings/list.html", {"bookings": bookings})
+def booking_detail(request, pk):
+    booking = get_object_or_404(Booking, pk=pk)
+    return render(request, "bookings/detail.html", {"booking": booking})
+def smslog_list(request):
+    smslogs = SMSLog.objects.all()
+    return render(request, "smslogs/list.html", {"smslogs": smslogs})
+def smslog_detail(request, pk):
+    smslog = get_object_or_404(SMSLog, pk=pk)
+    return render(request, "smslogs/detail.html", {"smslog": smslog})
+
 @login_required
 def admin_dashboard(request):
     if not request.user.is_superuser:

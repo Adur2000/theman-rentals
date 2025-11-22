@@ -1,15 +1,13 @@
 from django.contrib import admin
 from django.urls import path, include
-from django.contrib.auth import views as auth_views
-from django.conf import settings
-from django.conf.urls.static import static
 
 urlpatterns = [
+    # Django’s built-in admin site
     path('admin/', admin.site.urls),
-    path('', include('rentals.urls')),
-    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
-]
 
-# ✅ Append media route support
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # Include all routes from the rentals app
+    path('', include('rentals.urls')),
+
+    # Django’s built-in auth (login/logout/password reset)
+    path('accounts/', include('django.contrib.auth.urls')),
+]

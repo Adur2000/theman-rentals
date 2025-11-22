@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import House, Landlord, Rider
+from .models import House, Landlord, Rider, SMSLog
+from .models import Landlord
 
 class HouseAdmin(admin.ModelAdmin):
     list_display = ('colored_title', 'location', 'colored_status', 'landlord')
@@ -25,16 +26,20 @@ class LandlordAdmin(admin.ModelAdmin):
     colored_area.short_description = "Area"
 
 class RiderAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone', 'colored_price', 'area')
+    list_display = ('user', 'phone_number', 'colored_price', 'area')  # ✅ fixed to match model
 
     def colored_price(self, obj):
         return format_html('<span style="color:#e67e22; font-weight:bold;">KES {}</span>', obj.price)
     colored_price.short_description = "Delivery Price"
 
+class SmsLogAdmin(admin.ModelAdmin):
+    list_display = ('id', 'action', 'status', 'timestamp') # adjust fields to your SmsLog model
+
 # Register models with custom admin
 admin.site.register(House, HouseAdmin)
 admin.site.register(Landlord, LandlordAdmin)
 admin.site.register(Rider, RiderAdmin)
+admin.site.register(SMSLog, SmsLogAdmin)  # ✅ register once only
 
 # Customize admin site headers
 admin.site.site_header = "🏠 The Man Rentals Admin"

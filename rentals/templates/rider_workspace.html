@@ -1,32 +1,99 @@
-<div class="rider-info" style="margin-bottom: 20px; padding: 10px; background-color: #f1f8e9; border-left: 4px solid #66bb6a;">
-    <h3>Welcome, {{ rider.user.username }}</h3>
-    <p><strong>Registered Area:</strong> {{ rider.area }}</p>
-    <p><strong>Phone:</strong> {{ rider.phone }}</p>
-    <p><strong>Delivery Price:</strong> KES {{ rider.price }}</p>
-</div>
-
-<div id="map" style="height: 500px;"></div>
-{{ bookings|json_script:"bookings-data" }}
-<script>
-  function initMap() {
-    const riderArea = {
-  lat: parseFloat("{{ rider.latitude|default_if_none:'0' }}"),
-  lng: parseFloat("{{ rider.longitude|default_if_none:'0' }}")
-};
-    const map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 12,
-      center: riderArea,
-    });
-
-    const bookings = JSON.parse(document.getElementById("bookings-data").textContent || '[]');
-    for (let i = 0; i < bookings.length; i++) {
-      const booking = bookings[i];
-      new google.maps.Marker({
-        position: { lat: booking.latitude, lng: booking.longitude },
-        map: map,
-        title: (booking.tenant && booking.tenant.username ? booking.tenant.username : "") + " - KES " + booking.calculated_price,
-      });
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rider Workspace</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', 'Segoe UI', sans-serif; /* Android-friendly */
+      background: linear-gradient(135deg, #a8edea, #fed6e3);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
     }
-  }
-</script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    .rider-info {
+      margin: 20px auto;
+      padding: 20px;
+      max-width: 600px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      border-left: 6px solid #66bb6a;
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    .rider-info h3 {
+      margin-top: 0;
+      color: #2e7d32;
+      font-size: 1.6em;
+      font-weight: bold;
+    }
+
+    .rider-info p {
+      margin: 8px 0;
+      font-size: 1.05em;
+      color: #444;
+    }
+
+    .rider-info strong {
+      color: #000;
+    }
+
+    #map {
+      height: 500px;
+      margin: 20px auto;
+      max-width: 900px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      border: 3px solid #66bb6a;
+    }
+  </style>
+</head>
+<body>
+  <div class="rider-info">
+    <h3>🚴 Welcome, {{ rider.user.username }}</h3>
+    <p><strong>Registered Area:</strong> {{ rider.area }}</p>
+    <p><strong>Phone:</strong> <a href="tel:{{ rider.phone }}">{{ rider.phone }}</a></p>
+    <p><strong>Delivery Price:</strong> <span style="color:#e74c3c;">KES {{ rider.price }}</span></p>
+  </div>
+
+  <div id="map"></div>
+
+  {{ bookings|json_script:"bookings-data" }}
+  <script>
+    function initMap() {
+      const riderArea = {
+        lat: parseFloat("{{ rider.latitude|default_if_none:'0' }}"),
+        lng: parseFloat("{{ rider.longitude|default_if_none:'0' }}")
+      };
+      const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 12,
+        center: riderArea,
+      });
+
+      const bookings = JSON.parse(document.getElementById("bookings-data").textContent || '[]');
+      for (let i = 0; i < bookings.length; i++) {
+        const booking = bookings[i];
+        new google.maps.Marker({
+          position: { lat: booking.latitude, lng: booking.longitude },
+          map: map,
+          title: (booking.tenant && booking.tenant.username ? booking.tenant.username : "") + " - KES " + booking.calculated_price,
+        });
+      }
+    }
+  </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+</body>
+</html>

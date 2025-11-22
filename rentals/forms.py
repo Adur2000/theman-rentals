@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.forms.models import modelformset_factory
 from .models import CustomUser, House, HouseImage
 
+
 class CustomUserCreationForm(UserCreationForm):
     username = forms.CharField(
         widget=forms.TextInput(attrs={
@@ -11,7 +12,7 @@ class CustomUserCreationForm(UserCreationForm):
             'style': 'border-radius:8px; padding:10px;'
         })
     )
-    phone = forms.CharField(
+    phone_number = forms.CharField(   # ✅ match your CustomUser model field
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Enter your phone number',
@@ -42,7 +43,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'phone', 'role', 'password1', 'password2']
+        fields = ['username', 'phone_number', 'role', 'password1', 'password2']  # ✅ corrected
 
 
 class HouseForm(forms.ModelForm):

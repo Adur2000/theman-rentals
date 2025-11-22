@@ -1,0 +1,11 @@
+<h2>Available Houses</h2>
+<ul>
+    {% for house in houses %}
+        <li>
+            <a href="{% url 'house_detail' house.pk %}">{{ house.title }}</a>
+            - {{ house.location }}
+        </li>
+    {% empty %}
+        <li>No houses available.</li>
+    {% endfor %}
+</ul>

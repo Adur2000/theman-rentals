@@ -33,11 +33,9 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 print("ALLOWED_HOSTS:", ALLOWED_HOSTS)
 
-# Authentication redirects
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/accounts/login/'   # ✅ fixed to match Django’s default auth URLs
-LOGIN_URL = '/accounts/login/'             # ✅ ensures login_required knows where to redirect
-
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "home"
+LOGIN_URL = "login"
 # Application definition
 AUTH_USER_MODEL = 'rentals.CustomUser'
 

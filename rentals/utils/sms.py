@@ -1,17 +1,13 @@
-import africastalking
-from django.conf import settings
-
-africastalking.initialize(
-    username=settings.AFRICASTALKING_USERNAME,
-    api_key=settings.AFRICASTALKING_API_KEY
-)
-
-sms = africastalking.SMS
-
 def send_sms_alert(phone_number, message):
-    try:
-        response = sms.send(message, [phone_number])
-        return response
-    except Exception as e:
-        print(f"SMS Error: {e}")
-        return None
+    """
+    Mock SMS alert function for local testing.
+
+    Args:
+        phone_number (str): The recipient's phone number.
+        message (str): The message content.
+
+    Returns:
+        dict: Simulated response.
+    """
+    print(f"[SMS MOCK] Would send to {phone_number}: {message}")
+    return {"status": "mocked", "phone_number": phone_number, "message": message}

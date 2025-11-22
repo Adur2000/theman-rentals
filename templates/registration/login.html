@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login to Your Account</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #6dd5ed, #2193b0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background-color: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            color: #2193b0;
+        }
+
+        .login-container label {
+            display: block;
+            text-align: left;
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 12px;
+            background-color: #2193b0;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-container button:hover {
+            background-color: #1b7ca6;
+        }
+
+        .login-container .register-link {
+            margin-top: 15px;
+            font-size: 0.95em;
+        }
+
+        .login-container .register-link a {
+            color: #2193b0;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .login-container .register-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>🔐 Login to Your Account</h2>
+        <form method="post">
+            {% csrf_token %}
+            <label for="id_username">Username</label>
+            {{ form.username }}
+
+            <label for="id_password">Password</label>
+            {{ form.password }}
+
+            <button type="submit">Log In</button>
+        </form>
+
+        <div class="register-link">
+            Don't have an account? <a href="{% url 'register' %}">Register here</a>
+        </div>
+    </div>
+
+</body>
+</html>

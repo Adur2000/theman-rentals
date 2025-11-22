@@ -19,6 +19,7 @@ from django.core.paginator import Paginator
 import csv
 import io
 from django.http import HttpResponse
+from rentals.utils.sms import send_sms_alert
 
 
 

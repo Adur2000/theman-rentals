@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to THE MAN</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            color: #00ffff;
+            margin-bottom: 5px;
+        }
+
+        p.subtitle {
+            text-align: center;
+            font-style: italic;
+            font-size: 18px;
+            color: #f0f0f0;
+            margin-bottom: 30px;
+        }
+
+        .user-info {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .user-info strong {
+            color: #ffd700;
+        }
+
+        a {
+            color: #00ffff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .search-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 250px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #00ffff;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #00cccc;
+        }
+
+        .footer-note {
+            margin-top: 40px;
+            text-align: center;
+            font-weight: bold;
+            color: #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <h1>WELCOME TO THE MAN</h1>
+    <p class="subtitle">Your need, our priority</p>
+
+    {% if user.is_authenticated %}
+        <div class="user-info">
+            <p>Welcome, <strong>{{ user.username }}</strong>!</p>
+            <p>Role: <strong>{{ user.role|title }}</strong></p>
+            <p>
+                <a href="{% url 'logout' %}">Logout</a> |
+                <a href="{% url 'house_list' %}">View Available Houses</a>|
+              <a href="{% url 'rider_workspace' %}" class="nav-btn">Go to Rider Workspace</a>  
+            </p>
+        </div>
+
+        <div class="search-section">
+            <h3>Search Houses by Location</h3>
+            <form method="get" action="{% url 'house_list' %}">
+                <input type="text" name="location" placeholder="Enter location..." required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    {% else %}
+        <div class="user-info">
+            <p>
+                <a href="{% url 'register' %}">Register</a> |
+                <a href="{% url 'login' %}">Login</a>
+            </p>
+        </div>
+    {% endif %}
+
+    <div class="footer-note">
+        For Enquiry you can Call or Sms at +254745300566!
+    </div>
+</body>
+</html>

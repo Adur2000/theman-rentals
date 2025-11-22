@@ -1,6 +1,9 @@
 from django.urls import path
 from . import views
 from .views import create_house
+from django.contrib import admin
+from django.urls import path,include
+
 
 urlpatterns = [
     path('create-house/', create_house, name='create_house'),
@@ -22,6 +25,9 @@ urlpatterns = [
     path('dashboard/admin/edit-user/<int:user_id>/', views.edit_user, name='edit_user'),
     path('dashboard/admin/delete-user/<int:user_id>/', views.delete_user, name='delete_user'),
     path('dashboard/admin/export-users/', views.export_users_excel, name='export_users_excel'),
+    path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),  # ✅ adds login/logout/password reset
+    
 ]
 
 

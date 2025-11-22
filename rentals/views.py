@@ -24,24 +24,14 @@ from django.shortcuts import render
 from .decorators import role_required
 from .models import House, Booking, SmsLog, CustomUser
 
+from django.shortcuts import render
 
-
-
-@login_required
 def home(request):
-    user = request.user
-    if user.is_superuser:
-        return redirect('admin_dashboard')
-    elif user.role == 'landlord':
-        return redirect('landlord_dashboard')  # Create this view/template if needed
-    elif user.role == 'rider':
-        return redirect('rider_workspace')
-    elif user.role == 'tenant':
-        return redirect('house_list')
+    # Always show home.html after login
+    if request.user.is_authenticated:
+        return render(request, 'home.html', {'user_role': request.user.role})
     else:
-        return render(request, 'access_denied.html', {
-            'message': "Your role is not recognized. Please contact support."
-        })
+        return render(request, 'home.html')
 
 def house_list(request):
     location_query = request.GET.get('location')

@@ -85,32 +85,28 @@
     <h1>WELCOME TO THE MAN</h1>
     <p class="subtitle">Your need, our priority</p>
 
-    {% if user.is_authenticated %}
-        <div class="user-info">
-            <p>Welcome, <strong>{{ user.username }}</strong>!</p>
-            <p>Role: <strong>{{ user.role|title }}</strong></p>
-            <p>
-                <a href="{% url 'logout' %}">Logout</a> |
-                <a href="{% url 'house_list' %}">View Available Houses</a>|
-              <a href="{% url 'rider_workspace' %}" class="nav-btn">Go to Rider Workspace</a>  
-            </p>
-        </div>
+  {% if user.is_authenticated %}
+  <p>Hello {{ user.username }} ({{ user_role }})!</p>
+  <a href="{% url 'logout' %}">Logout</a>
 
-        <div class="search-section">
-            <h3>Search Houses by Location</h3>
-            <form method="get" action="{% url 'house_list' %}">
-                <input type="text" name="location" placeholder="Enter location..." required>
-                <button type="submit">Search</button>
-            </form>
-        </div>
-    {% else %}
-        <div class="user-info">
-            <p>
-                <a href="{% url 'register' %}">Register</a> |
-                <a href="{% url 'login' %}">Login</a>
-            </p>
-        </div>
-    {% endif %}
+  <hr>
+  <h2>Quick Access</h2>
+  {% if user_role == "CEO" %}
+    <a href="{% url 'ceo_dashboard' %}">Go to CEO Dashboard</a>
+  {% elif user_role == "Manager" %}
+    <a href="{% url 'manager_dashboard' %}">Go to Manager Dashboard</a>
+  {% elif user_role == "Landlord" %}
+    <a href="{% url 'landlord_dashboard' %}">Go to Landlord Dashboard</a>
+  {% elif user_role == "Rider" %}
+    <a href="{% url 'rider_workspace' %}">Go to Rider Workspace</a>
+  {% elif user_role == "Tenant" %}
+    <a href="{% url 'house_list' %}">Browse Houses</a>
+  {% endif %}
+{% else %}
+  <a href="{% url 'login' %}">Login</a> |
+  <a href="{% url 'register' %}">Register</a>
+{% endif %}
+  
 
     <div class="footer-note">
         For Enquiry you can Call or Sms at +254745300566!
